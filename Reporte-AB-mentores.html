@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Campaña - Aumento de Base</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .metric-title {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .metric-subtitle {
+            color: #999;
+            font-size: 13px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            background: white;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s;
+        }
+        
+        .tab:hover {
+            background: #f0f0f0;
+        }
+        
+        .tab.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .tab-content {
+            padding: 30px;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .info-card-title {
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .info-card-value {
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .bar-chart {
+            margin: 15px 0;
+        }
+        
+        .bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bar-label {
+            width: 200px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .bar-container {
+            flex: 1;
+            height: 35px;
+            background: #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            transition: width 1s ease-in-out;
+        }
+        
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 30px;
+            transition: background 0.3s;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+        }
+        
+        .analysis-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .analysis-box p {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+        
+        .demo-bar {
+            margin: 20px 0;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .demo-bar h4 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .progress-bar {
+            margin: 10px 0;
+        }
+        
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .progress-track {
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            transition: width 1s ease-in-out;
+        }
+        
+        .progress-fill.pink {
+            background: #ec4899;
+        }
+        
+        .progress-fill.blue {
+            background: #3b82f6;
+        }
+        
+        .progress-fill.purple {
+            background: #a855f7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Reporte de Campaña</h1>
+            <p>Aumento de Base - Instagram/Facebook</p>
+            <p style="margin-top: 5px; font-size: 14px;">13 nov 2025 - 18 nov 2025 (6 días)</p>
+        </div>
+        
+        <button class="download-btn" onclick="downloadCSV()">⬇️ Descargar Datos en CSV</button>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-title">👥 Visitas al Perfil</div>
+                <div class="metric-value">79</div>
+                <div class="metric-subtitle">Costo: $716.25 COP</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-title">👁️ Visualizaciones</div>
+                <div class="metric-value">4,700</div>
+                <div class="metric-subtitle">3,700 espectadores</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-title">📈 Interacciones</div>
+                <div class="metric-value">2,500</div>
+                <div class="metric-subtitle">CTR: 1.77%</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-title">💰 Gastado</div>
+                <div class="metric-value">$56,584</div>
+                <div class="metric-subtitle">de $566 COP presupuesto</div>
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('resumen')">Resumen</button>
+            <button class="tab" onclick="showTab('demografia')">Demografía</button>
+            <button class="tab" onclick="showTab('ubicaciones')">Ubicaciones</button>
+            <button class="tab" onclick="showTab('rendimiento')">Rendimiento</button>
+        </div>
+        
+        <div id="resumen" class="tab-content active">
+            <h2 class="section-title">Información General</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-title">Objetivo</div>
+                    <div class="info-card-value">Conseguir más visitas en el perfil</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Plataformas</div>
+                    <div class="info-card-value">Facebook, Instagram</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Duración</div>
+                    <div class="info-card-value">6 días</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Creado por</div>
+                    <div class="info-card-value">Vanessa Vargas Tips</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Métricas de Video</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-title">Reproducciones</div>
+                    <div class="info-card-value">4,000</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">ThruPlays</div>
+                    <div class="info-card-value">380</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Tiempo Promedio</div>
+                    <div class="info-card-value">7 segundos</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Reproducciones 3s</div>
+                    <div class="info-card-value">2,300</div>
+                </div>
+            </div>
+            
+            <h2 class="section-title">Interacciones</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-title">Clics en enlace</div>
+                    <div class="info-card-value">81</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Reacciones</div>
+                    <div class="info-card-value">80</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Guardados</div>
+                    <div class="info-card-value">10</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Compartidos</div>
+                    <div class="info-card-value">3</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Comentarios</div>
+                    <div class="info-card-value">1</div>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-title">Seguimientos</div>
+                    <div class="info-card-value">30</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="demografia" class="tab-content">
+            <h2 class="section-title">Distribución por Edad y Sexo</h2>
+            
+            <div class="demo-bar">
+                <h4>35-44 años</h4>
+                <div class="progress-bar">
+                    <div class="progress-label">
+                        <span style="color: #ec4899;">Mujeres</span>
+                        <span style="font-weight: bold;">43.4%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill pink" style="width: 43.4%"></div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-label">
+                        <span style="color: #3b82f6;">Hombres</span>
+                        <span style="font-weight: bold;">54.9%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill blue" style="width: 54.9%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="demo-bar">
+                <h4>25-34 años</h4>
+                <p style="color: #999;">Audiencia presente con menor porcentaje</p>
+            </div>
+            
+            <div class="demo-bar">
+                <h4>55-64 años</h4>
+                <div class="progress-bar">
+                    <div class="progress-label">
+                        <span style="color: #a855f7;">No binario</span>
+                        <span style="font-weight: bold;">1.7%</span>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill purple" style="width: 20%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="ubicaciones" class="tab-content">
+            <h2 class="section-title">Ubicaciones Geográficas</h2>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">Distrito Especial</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%">843</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Antioquia</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 94%">792</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Valle del Cauca</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 67%">563</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Cundinamarca</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 24%">200</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Atlántico</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 21%">174</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Santander</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 20%">167</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Bolívar</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 17%">142</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Risaralda</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 14%">116</div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 40px;">Ubicaciones de Anuncios</h2>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">Feed Instagram (móvil)</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 100%">1,914</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Instagram Reels (móvil)</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 91%">1,742</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Instagram Stories (móvil)</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 14%">268</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Facebook Stories (móvil)</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 1%">2</div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">Explorar Instagram</div>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 1%">2</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="rendimiento" class="tab-content">
+            <h2 class="section-title">Análisis de Rendimiento</h2>
+            
+            <div class="info-grid">
+                <div class="info-card" style="background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);">
+                    <div class="info-card-title">Eficiencia de Costo</div>
+                    <div class="info-card-value" style="font-size: 28px; color: #1e40af;">$716.25</div>
+                    <div style="margin-top: 5px; color: #666;">por visita al perfil</div>
+                </div>
+                <div class="info-card" style="background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);">
+                    <div class="info-card-title">Tasa de Clics</div>
+                    <div class="info-card-value" style="font-size: 28px; color: #065f46;">1.77%</div>
+                    <div style="margin-top: 5px; color: #666;">81 clics totales</div>
+                </div>
+                <div class="info-card" style="background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);">
+                    <div class="info-card-title">Nuevos Seguidores</div>
+                    <div class="info-card-value" style="font-size: 28px; color: #6b21a8;">30</div>
+                    <div style="margin-top: 5px; color: #666;">seguidores de Instagram</div>
+                </div>
+            </div>
+            
+            <div class="analysis-box">
+                <h3 style="margin-bottom: 15px; color: #333;">📊 Análisis de Resultados</h3>
+                <p>• La campaña generó <strong>79 visitas al perfil</strong> con un costo promedio de $716.25 por visita.</p>
+                <p>• Se alcanzaron <strong>4,700 visualizaciones</strong> llegando a 3,700 espectadores únicos.</p>
+                <p>• El contenido en video obtuvo <strong>4,000 reproducciones</strong> con un tiempo promedio de visualización de 7 segundos.</p>
+                <p>• Las ubicaciones principales fueron: Distrito Especial (843), Antioquia (792) y Valle del Cauca (563).</p>
+                <p>• El público objetivo fue principalmente adultos de <strong>35-44 años</strong> con una distribución de 43.4% mujeres y 54.9% hombres.</p>
+                <p style="margin-bottom: 0;">• Los mejores placements fueron <strong>Feed de Instagram</strong> (1,914) y <strong>Reels</strong> (1,742).</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Ocultar todos los contenidos
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Desactivar todos los tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Mostrar el contenido seleccionado
+            document.getElementById(tabName).classList.add('active');
+            
+            // Activar el tab seleccionado
+            event.target.classList.add('active');
+        }
+        
+        function downloadCSV() {
+            const csvContent = `REPORTE DE CAMPAÑA - AUMENTO DE BASE
+
+INFORMACIÓN GENERAL
+Nombre de Campaña,Campaña de Aumento de Base
+Fecha de Inicio,13 nov 2025
+Fecha de Finalización,18 nov 2025
+Duración,6 días
+Objetivo,Conseguir más visitas en el perfil
+Plataformas,Facebook e Instagram
+Creado por,Vanessa Vargas Tips
+
+MÉTRICAS PRINCIPALES
+Métrica,Valor
+Visitas al Perfil,79
+Costo por Visita,$716.25 COP
+Importe Gastado,$56584 COP
+Presupuesto Total,$566 COP
+Visualizaciones,4700
+Espectadores,3700
+Interacciones,2500
+CTR,1.77%
+Seguimientos de Instagram,30
+
+MÉTRICAS DE VIDEO
+Reproducciones de Video,4000
+ThruPlays,380
+Tiempo Promedio,7 segundos
+Reproducciones de 3 Segundos,2300
+
+INTERACCIONES
+Clics en el Enlace,81
+Reacciones,80
+Guardados,10
+Compartidos,3
+Comentarios,1
+
+DEMOGRAFÍA
+Rango de Edad,Descripción
+35-44 años,Mujeres: 43.4% | Hombres: 54.9%
+25-34 años,Audiencia presente
+55-64 años,No binario: 1.7%
+
+UBICACIONES PRINCIPALES
+Lugar,Cantidad
+Distrito Especial,843
+Antioquia,792
+Valle del Cauca,563
+Cundinamarca,200
+Atlántico,174
+Santander,167
+Bolívar,142
+Risaralda,116
+
+UBICACIONES DE ANUNCIOS
+Tipo,Cantidad
+Feed de Instagram (móvil),1914
+Instagram Reels (móvil),1742
+Instagram Stories (móvil),268
+Facebook Stories (móvil),2
+Explorar Instagram (móvil),2`;
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'reporte_campana_aumento_base.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
